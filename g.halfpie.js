@@ -1,3 +1,4 @@
+
 /*!
  * g.Raphael 0.51 - Charting library, based on Raphaël
  *
@@ -6,13 +7,13 @@
  */
 
  /*
- * piechart method on paper
+ * halfpiechart method on paper
  */
 /*\
- * Paper.piechart
+ * Paper.halfpiechart
  [ method ]
  **
- * Creates a pie chart
+ * Creates a half pie chart
  **
  > Parameters
  **
@@ -43,7 +44,7 @@
  
 (function () {
 
-    function Piechart(paper, cx, cy, r, values, opts) {
+    function Halfpiechart(paper, cx, cy, r, values, opts) {
         opts = opts || {};
 
         var chartinst = this,
@@ -96,9 +97,9 @@
             }
             
             //values are sorted numerically
-            values.sort(function (a, b) {
+            /*values.sort(function (a, b) {
                 return b.value - a.value;
-            });
+            });*/
             
             for (i = 0; i < len; i++) {
                 if (defcut && values[i] * 100 / total < minPercent) {
@@ -121,7 +122,7 @@
                 var mangle = angle - 360 * values[i] / total / 2;
 
                 if (!i) {
-                    angle = 90 - mangle;
+                    angle = 180; // - mangle;
                     mangle = angle - 360 * values[i] / total / 2;
                 }
 
@@ -129,7 +130,7 @@
                     var ipath = sector(cx, cy, 1, angle, angle - 360 * values[i] / total).join(",");
                 }
 
-                var path = sector(cx, cy, r, angle, angle -= 360 * values[i] / total);
+                var path = sector(cx, cy, r, angle, angle -= 180 * values[i] / total);
                 var j = (opts.matchColors && opts.matchColors == true) ? values[i].order : i;
                 var p = paper.path(opts.init ? ipath : path).attr({ fill: opts.colors && opts.colors[j] || chartinst.colors[j] || "#666", stroke: opts.stroke || "#fff", "stroke-width": (opts.strokewidth == null ? 1 : opts.strokewidth), "stroke-linejoin": "round" });
 
@@ -286,11 +287,11 @@
     //inheritance
     var F = function() {};
     F.prototype = Raphael.g;
-    Piechart.prototype = new F;
+    Halfpiechart.prototype = new F;
     
     //public
-    Raphael.fn.piechart = function(cx, cy, r, values, opts) {
-        return new Piechart(this, cx, cy, r, values, opts);
+    Raphael.fn.halfpiechart = function(cx, cy, r, values, opts) {
+        return new Halfpiechart(this, cx, cy, r, values, opts);
     }
     
 })();
